@@ -68,7 +68,7 @@ public class JoystickController : MonoBehaviour
             rot = Vector2.zero;
             Vector2 rotMotor = WorldToMotor(rot);
             Debug.Log($"{rotMotor.x} {rotMotor.y}");
-            laser.position = new Vector3(rot.x * 5, rot.y * 5, 0);
+            laser.position = new Vector3(rot.x, rot.y, 0);
 
             return;
         }
@@ -96,7 +96,7 @@ public class JoystickController : MonoBehaviour
             Debug.Log($"{newRotMotor.x} {newRotMotor.y} {newLaserState}");
             //Debug.Log($"{newRotMotor.x}");
 
-            laser.position = new Vector3(newRot.x * 5, newRot.y * 5, 0);
+            laser.position = new Vector3(newRot.x, newRot.y, 0);
 
             motorWriteTimer = 0;
         }
