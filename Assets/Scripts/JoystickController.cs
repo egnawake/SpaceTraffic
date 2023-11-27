@@ -32,14 +32,18 @@ public class JoystickController : MonoBehaviour
     [SerializeField] private Transform laser;
     [SerializeField] private TMP_Text horizontalDebugText;
     [SerializeField] private TMP_Text verticalDebugText;
+    [SerializeField] private TMP_Text knobDebugText;
 
     [Range(0, 180)]
     [SerializeField] private int value;
 
     private Vector2 rot;
     private int laserState;
+    private float frequency = 0;
 
     private float motorWriteTimer = 0;
+
+    public float Frequency => frequency;
 
     private void Start()
     {
@@ -52,6 +56,7 @@ public class JoystickController : MonoBehaviour
     {
         UpdateRotation();
         InteractWithAliens();
+        UpdateFrequency();
         motorWriteTimer += Time.deltaTime;
     }
 
@@ -121,6 +126,19 @@ public class JoystickController : MonoBehaviour
         }
     }
 
+    private void UpdateFrequency()
+    {
+        float scrollDelta = Input.GetAxis("Mouse ScrollWheel");
+        frequency = Mathf.Clamp(frequency + scrollDelta, 0, 1f);
+
+        if (knobDebugText != null)
+        {
+            knobDebugText.text = $"Freq: {frequency}";
+        }
+
+        onFrequencyChanged?.Invoke(frequency);
+    }
+
     private Vector2 GetJoystickInput()
     {
         float h = Input.GetAxis("Horizontal");
@@ -175,4 +193,6 @@ public class JoystickController : MonoBehaviour
 
         return new Vector2(motorHRot, motorVRot);
     }
+
+    public event Action<float> onFrequencyChanged;
 }

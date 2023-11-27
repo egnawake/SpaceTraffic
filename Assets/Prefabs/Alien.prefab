@@ -178,7 +178,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3fdd72a749c57749a6cd23e7ba024cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lowPassCutoffRange: {x: 500, y: 10000}
   message: {fileID: 11400000, guid: fb038faf30f715543a9feb475239a20b, type: 2}
+  frequency: 0.8
+  player: {fileID: 0}
 --- !u!1 &8366620854648089775
 GameObject:
   m_ObjectHideFlags: 0
