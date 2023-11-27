@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1521321898712351868}
   - component: {fileID: 3891310262099675362}
   - component: {fileID: 627804428943997827}
+  - component: {fileID: 9097736659702071317}
   m_Layer: 0
   m_Name: Alien
   m_TagString: Untagged
@@ -79,7 +80,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 24300002, guid: 5a30dbb4805a0f347a296a6eda9c30ea, type: 2}
-  m_audioClip: {fileID: 8300000, guid: f17c50240d0ae1e48880b36eb7a3f2a1, type: 3}
+  m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -165,6 +166,19 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &9097736659702071317
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5688956899004368271}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3fdd72a749c57749a6cd23e7ba024cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  message: {fileID: 11400000, guid: fb038faf30f715543a9feb475239a20b, type: 2}
 --- !u!1 &8366620854648089775
 GameObject:
   m_ObjectHideFlags: 0

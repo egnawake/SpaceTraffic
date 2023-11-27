@@ -21,6 +21,7 @@ public class Alien : MonoBehaviour
     {
         AudioSource audioSource = GetComponent<AudioSource>();
         audioSource.clip = message.audioClip;
+        audioSource.Play();
     }
 
     public event Action<AlienAlignment> onAccepted;

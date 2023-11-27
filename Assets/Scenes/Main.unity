@@ -565,6 +565,7 @@ MonoBehaviour:
   motorAngleRange: {x: 30, y: 30}
   motorWriteInterval: 0.1
   rotationSpeed: {x: 1, y: 1}
+  laserProbeRadius: 0.1
   serialController: {fileID: 1999141870}
   laser: {fileID: 639371915}
   horizontalDebugText: {fileID: 265057418}

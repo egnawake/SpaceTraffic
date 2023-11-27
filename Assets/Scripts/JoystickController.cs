@@ -24,6 +24,8 @@ public class JoystickController : MonoBehaviour
 
     [SerializeField] private Vector2 rotationSpeed = new Vector2(0.01f, 0.01f);
 
+    [SerializeField] private float laserProbeRadius = 0.1f;
+
     [SerializeField] private SerialController serialController;
 
     [Header("Debug")]
@@ -49,6 +51,7 @@ public class JoystickController : MonoBehaviour
     private void Update()
     {
         UpdateRotation();
+        InteractWithAliens();
         motorWriteTimer += Time.deltaTime;
     }
 
@@ -62,17 +65,6 @@ public class JoystickController : MonoBehaviour
 
     private void UpdateRotation()
     {
-        // Reset to center
-        if (Input.GetButtonDown("Fire1"))
-        {
-            rot = Vector2.zero;
-            Vector2 rotMotor = WorldToMotor(rot);
-            Debug.Log($"{rotMotor.x} {rotMotor.y}");
-            laser.position = new Vector3(rot.x, rot.y, 0);
-
-            return;
-        }
-
         Vector2 input = GetJoystickInput();
         DebugShowInput(input);
 
@@ -103,6 +95,30 @@ public class JoystickController : MonoBehaviour
 
         rot = newRot;
         laserState = newLaserState;
+    }
+
+    private void InteractWithAliens()
+    {
+        bool shoot = Input.GetButtonDown("Fire1");
+        bool accept = Input.GetButtonDown("Fire2");
+
+        if (!shoot && !accept) return;
+
+        Collider2D collider = Physics2D.OverlapCircle(laser.transform.position, laserProbeRadius);
+
+        Alien alien = collider?.GetComponent<Alien>();
+        if (alien == null) return;
+
+        if (shoot)
+        {
+            alien.Shoot();
+            Debug.Log("Alien shot!");
+        }
+        else if (accept)
+        {
+            alien.Accept();
+            Debug.Log("Granted access to alien!");
+        }
     }
 
     private Vector2 GetJoystickInput()
