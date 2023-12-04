@@ -13,7 +13,6 @@ public class Alien : MonoBehaviour
     public void Accept()
     {
         onAccepted?.Invoke(message.alignment);
-        onCleared?.Invoke();
 
         Destroy(gameObject);
     }
@@ -21,7 +20,6 @@ public class Alien : MonoBehaviour
     public void Shoot()
     {
         onShot?.Invoke(message.alignment);
-        onCleared?.Invoke();
 
         Destroy(gameObject);
     }
@@ -53,5 +51,4 @@ public class Alien : MonoBehaviour
 
     public event Action<AlienAlignment> onAccepted;
     public event Action<AlienAlignment> onShot;
-    public event Action onCleared;
 }
