@@ -8,6 +8,7 @@ public class AlienSpawner : MonoBehaviour
     [SerializeField] private JoystickController player;
     [SerializeField] private FeedbackAudioPlayer feedbackAudioPlayer;
     [SerializeField] private Alien alienPrefab;
+    [SerializeField] private AlienMessage[] messages;
 
     private void Spawn()
     {
@@ -17,6 +18,9 @@ public class AlienSpawner : MonoBehaviour
         alien.transform.position = pos;
         alien.player = player;
         alien.frequency = Random.Range(0, 1f);
+
+        AlienMessage msg = messages[Random.Range(0, messages.Length)];
+        alien.message = msg;
 
         alien.onAccepted += HandleAlienAccept;
         alien.onShot += HandleAlienShoot;
