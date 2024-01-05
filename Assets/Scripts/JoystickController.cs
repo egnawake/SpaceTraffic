@@ -20,6 +20,8 @@ public class JoystickController : MonoBehaviour
     [Tooltip("Range of motor rotation, in degrees, for each axis, in each direction.")]
     [SerializeField] private Vector2 motorAngleRange = new Vector2(30f, 30f);
 
+    [SerializeField] private Vector2Int motorOffset = new Vector2Int(0, 0);
+
     [SerializeField] private float motorWriteInterval = 0.02f;
 
     [SerializeField] private Vector2 rotationSpeed = new Vector2(0.01f, 0.01f);
@@ -64,7 +66,7 @@ public class JoystickController : MonoBehaviour
     {
         if (serialController.enabled)
         {
-            serialController.SendSerialMessage("90 90 0");
+            serialController.SendSerialMessage($"{90 + motorOffset.x} {90 + motorOffset.y} 0");
         }
     }
 
@@ -197,8 +199,8 @@ public class JoystickController : MonoBehaviour
         int motorHRot = (int)Mathf.Floor(-world.x * motorAngleRange.x);
         int motorVRot = (int)Mathf.Floor(world.y * motorAngleRange.y);
 
-        motorHRot = motorHRot + 90;
-        motorVRot = motorVRot + 90;
+        motorHRot = motorHRot + 90 + motorOffset.x;
+        motorVRot = motorVRot + 90 + motorOffset.y;
 
         return new Vector2(motorHRot, motorVRot);
     }

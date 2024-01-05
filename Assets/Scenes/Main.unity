@@ -785,6 +785,7 @@ MonoBehaviour:
   neutralCorrection: {x: 0.1, y: -0.2}
   deadzone: {x: 0.075, y: 0.05}
   motorAngleRange: {x: 30, y: 30}
+  motorOffset: {x: 0, y: -20}
   motorWriteInterval: 0.1
   rotationSpeed: {x: 1, y: 1}
   laserProbeRadius: 0.1
