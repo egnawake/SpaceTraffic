@@ -3,12 +3,11 @@ using System;
 
 public class Alien : MonoBehaviour
 {
-    public Vector2 lowPassCutoffRange = new Vector2(500f, 10000f);
     public AlienMessage message;
     public float frequency;
     public JoystickController player;
 
-    private AudioLowPassFilter filter;
+    private IAlienAudioFilter[] audioFilters;
 
     public void Accept()
     {
@@ -30,23 +29,29 @@ public class Alien : MonoBehaviour
         AudioSource audioSource = GetComponent<AudioSource>();
         audioSource.clip = message.audioClip;
 
-        // Set up audio filter
-        filter = gameObject.AddComponent<AudioLowPassFilter>();
-        UpdateAudioFilter(player.Frequency);
-        player.onFrequencyChanged += UpdateAudioFilter;
+        // Set up audio filters
+        audioFilters = GetComponents<IAlienAudioFilter>();
+        if (audioFilters.Length > 0)
+        {
+            UpdateAudioFilters(player.Frequency);
+            player.onFrequencyChanged += UpdateAudioFilters;
+        }
 
         audioSource.Play();
     }
 
-    private void UpdateAudioFilter(float knob)
+    private void UpdateAudioFilters(float knob)
     {
         float t = 1f - Mathf.Abs(frequency - knob);
-        filter.cutoffFrequency = Mathf.Lerp(lowPassCutoffRange.x, lowPassCutoffRange.y, t);
+        foreach (var filter in audioFilters)
+        {
+            filter.SetFrequency(t);
+        }
     }
 
     private void OnDestroy()
     {
-        player.onFrequencyChanged -= UpdateAudioFilter;
+        player.onFrequencyChanged -= UpdateAudioFilters;
     }
 
     public event Action<AlienAlignment> onAccepted;
