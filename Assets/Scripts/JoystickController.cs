@@ -93,7 +93,7 @@ public class JoystickController : MonoBehaviour
             Debug.Log($"{newRotMotor.x} {newRotMotor.y} {newLaserState}");
             //Debug.Log($"{newRotMotor.x}");
 
-            laser.position = new Vector3(newRot.x, newRot.y, 0);
+            laser.position = new Vector3(newRot.x, -newRot.y, 0);
 
             motorWriteTimer = 0;
         }
