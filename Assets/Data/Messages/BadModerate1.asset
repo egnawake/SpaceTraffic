@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   audioClip: {fileID: 8300000, guid: 2be25d82fe2eccd43a96b70d55796f76, type: 3}
   alignment: 0
+  difficulty: 1
