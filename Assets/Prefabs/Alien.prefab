@@ -178,7 +178,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3fdd72a749c57749a6cd23e7ba024cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lowPassCutoffRange: {x: 500, y: 10000}
+  lowPassCutoffRange: {x: 100, y: 10000}
   message: {fileID: 11400000, guid: 4822f278e3c91ac4c94d605cc521680a, type: 2}
   frequency: 0.8
   player: {fileID: 0}
