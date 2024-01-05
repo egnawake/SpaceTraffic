@@ -128,8 +128,17 @@ public class JoystickController : MonoBehaviour
 
     private void UpdateFrequency()
     {
-        float scrollDelta = Input.GetAxis("Mouse ScrollWheel");
-        frequency = Mathf.Clamp(frequency + scrollDelta, 0, 1f);
+        if (useJoystick)
+        {
+            // [0.2, -0.95]
+            float scroll = Input.GetAxis("Joystick Scroll");
+            frequency = Mathf.InverseLerp(-0.95f, 0.2f, scroll);
+        }
+        else
+        {
+            float scrollDelta = Input.GetAxis("Mouse ScrollWheel");
+            frequency = Mathf.Clamp(frequency + scrollDelta, 0, 1f);
+        }
 
         if (knobDebugText != null)
         {
