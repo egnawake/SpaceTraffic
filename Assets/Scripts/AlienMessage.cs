@@ -5,4 +5,5 @@ public class AlienMessage : ScriptableObject
 {
     public AudioClip audioClip;
     public AlienAlignment alignment;
+    public MessageDifficulty difficulty;
 }

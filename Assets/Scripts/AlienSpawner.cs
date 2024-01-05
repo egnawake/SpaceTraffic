@@ -19,11 +19,16 @@ public class AlienSpawner : MonoBehaviour
         alien.player = player;
         alien.frequency = Random.Range(0, 1f);
 
-        AlienMessage msg = messages[Random.Range(0, messages.Length)];
+        AlienMessage msg = ChooseMessage();
         alien.message = msg;
 
         alien.onAccepted += HandleAlienAccept;
         alien.onShot += HandleAlienShoot;
+    }
+
+    private AlienMessage ChooseMessage()
+    {
+        return messages[Random.Range(0, messages.Length)];
     }
 
     private void HandleAlienAccept(AlienAlignment alignment)
