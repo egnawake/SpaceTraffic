@@ -9,6 +9,8 @@ public class MessageSelector : MonoBehaviour
 
     private IList<AlienMessage>[] buckets;
 
+    public bool Exhausted { get; private set; } = false;
+
     public AlienMessage Select()
     {
         // Find first non-empty bucket
@@ -21,6 +23,7 @@ public class MessageSelector : MonoBehaviour
         // All buckets are empty, no more messages
         if (bucketIndex >= buckets.Length)
         {
+            Exhausted = true;
             return null;
         }
 

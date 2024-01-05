@@ -6,12 +6,14 @@ public class AlienSpawner : MonoBehaviour
 {
     [Tooltip("Min and max time to wait between spawns.")]
     [SerializeField] private Vector2 waitTime = new Vector2(0.1f, 0.5f);
+
+    [SerializeField] private Alien alienPrefab;
     [SerializeField] private JoystickController player;
     [SerializeField] private FeedbackAudioPlayer feedbackAudioPlayer;
-    [SerializeField] private Alien alienPrefab;
     [SerializeField] private TMP_Text messageText;
 
     private MessageSelector messageSelector;
+    private int score = 0;
 
     private void Spawn()
     {
@@ -67,6 +69,7 @@ public class AlienSpawner : MonoBehaviour
 
     private IEnumerator ProcessAlien(AlienAlignment choice, AlienAlignment alignment)
     {
+        // Play action sound
         if (choice == AlienAlignment.Good)
         {
             feedbackAudioPlayer.Play(FeedbackSound.Flyby);
@@ -77,8 +80,10 @@ public class AlienSpawner : MonoBehaviour
         }
         yield return new WaitUntil(() => !feedbackAudioPlayer.IsPlaying);
 
+        // Play result sound
         if (choice == alignment)
         {
+            score++;
             feedbackAudioPlayer.Play(FeedbackSound.Correct);
         }
         else
@@ -87,7 +92,14 @@ public class AlienSpawner : MonoBehaviour
         }
         yield return new WaitUntil(() => !feedbackAudioPlayer.IsPlaying);
 
-        yield return WaitAndSpawn();
+        if (messageSelector.Exhausted)
+        {
+            // Play end of game music
+        }
+        else
+        {
+            yield return WaitAndSpawn();
+        }
     }
 
     private void Awake()
