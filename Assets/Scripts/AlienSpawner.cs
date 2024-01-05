@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using TMPro;
 
 public class AlienSpawner : MonoBehaviour
 {
@@ -8,27 +9,38 @@ public class AlienSpawner : MonoBehaviour
     [SerializeField] private JoystickController player;
     [SerializeField] private FeedbackAudioPlayer feedbackAudioPlayer;
     [SerializeField] private Alien alienPrefab;
-    [SerializeField] private AlienMessage[] messages;
+    [SerializeField] private TMP_Text messageText;
+
+    private MessageSelector messageSelector;
 
     private void Spawn()
     {
+        AlienMessage msg = ChooseMessage();
+        if (msg == null)
+        {
+            return;
+        }
+
         Vector2 pos = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
 
         Alien alien = Instantiate(alienPrefab);
         alien.transform.position = pos;
         alien.player = player;
         alien.frequency = Random.Range(0, 1f);
-
-        AlienMessage msg = ChooseMessage();
         alien.message = msg;
 
         alien.onAccepted += HandleAlienAccept;
         alien.onShot += HandleAlienShoot;
+
+        if (messageText != null)
+        {
+            messageText.text = $"Message: {msg.alignment} {msg.difficulty}";
+        }
     }
 
     private AlienMessage ChooseMessage()
     {
-        return messages[Random.Range(0, messages.Length)];
+        return messageSelector.Select();
     }
 
     private void HandleAlienAccept(AlienAlignment alignment)
@@ -76,6 +88,11 @@ public class AlienSpawner : MonoBehaviour
         yield return new WaitUntil(() => !feedbackAudioPlayer.IsPlaying);
 
         yield return WaitAndSpawn();
+    }
+
+    private void Awake()
+    {
+        messageSelector = GetComponent<MessageSelector>();
     }
 
     private void Start()
