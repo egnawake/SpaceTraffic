@@ -3,32 +3,26 @@ using UnityEngine;
 
 public class FeedbackAudioPlayer : MonoBehaviour
 {
-    [SerializeField] private AudioClip correctSound;
-    [SerializeField] private AudioClip wrongSound;
-    [SerializeField] private AudioClip flybySound;
-    [SerializeField] private AudioClip explodeSound;
+    [SerializeField] private AudioSource flyby;
+    [SerializeField] private AudioSource explode;
+    [SerializeField] private AudioSource correct;
+    [SerializeField] private AudioSource wrong;
 
-    private AudioSource audioSource;
+    private AudioSource activeSource;
 
-    public bool IsPlaying => audioSource.isPlaying;
+    public bool IsPlaying => activeSource == null ? false : activeSource.isPlaying;
 
     public void Play(FeedbackSound sound)
     {
-        AudioClip c = sound switch
+        activeSource = sound switch
         {
-            FeedbackSound.Correct => correctSound,
-            FeedbackSound.Wrong => wrongSound,
-            FeedbackSound.Flyby => flybySound,
-            FeedbackSound.Explode => explodeSound,
+            FeedbackSound.Correct => correct,
+            FeedbackSound.Wrong => wrong,
+            FeedbackSound.Flyby => flyby,
+            FeedbackSound.Explode => explode,
             _ => throw new ArgumentException("Unknown sound")
         };
 
-        audioSource.clip = c;
-        audioSource.Play();
-    }
-
-    private void Awake()
-    {
-        audioSource = GetComponent<AudioSource>();
+        activeSource.Play();
     }
 }
