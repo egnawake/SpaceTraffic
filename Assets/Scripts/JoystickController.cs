@@ -30,6 +30,8 @@ public class JoystickController : MonoBehaviour
 
     [SerializeField] private SerialController serialController;
 
+    [SerializeField] private AudioSource targetLockAudio;
+
     [Header("Debug")]
     [SerializeField] private Transform laser;
     [SerializeField] private TMP_Text horizontalDebugText;
@@ -42,6 +44,8 @@ public class JoystickController : MonoBehaviour
     private Vector2 rot;
     private int laserState;
     private float frequency = 0;
+
+    private bool alienLocked = false;
 
     private float motorWriteTimer = 0;
 
@@ -62,6 +66,11 @@ public class JoystickController : MonoBehaviour
         motorWriteTimer += Time.deltaTime;
     }
 
+    private void FixedUpdate()
+    {
+        laser.transform.position = new Vector3(rot.x, -rot.y, 0);
+    }
+
     private void InitMotor()
     {
         if (serialController.enabled)
@@ -77,25 +86,22 @@ public class JoystickController : MonoBehaviour
 
         int newLaserState = GetLaser();
 
+        Vector2 direction = input.normalized;
+
         Vector2 newRot = new Vector2(
-            Mathf.Clamp(rot.x + input.x * rotationSpeed.x * Time.deltaTime, -1, 1),
-            Mathf.Clamp(rot.y + input.y * rotationSpeed.y * Time.deltaTime, -1, 1));
+            Mathf.Clamp(rot.x + direction.x * rotationSpeed.x * Time.deltaTime, -1, 1),
+            Mathf.Clamp(rot.y + direction.y * rotationSpeed.y * Time.deltaTime, -1, 1));
 
         Vector2 newRotMotor = WorldToMotor(newRot);
         Vector2 rotDiff = newRotMotor - WorldToMotor(rot);
 
-        if ((Mathf.Abs(rotDiff.x) > 0.999f || Mathf.Abs(rotDiff.y) > 0.999f || newLaserState != laserState)
-            && motorWriteTimer >= motorWriteInterval)
-        {
-            if (serialController.enabled)
-            {
-                serialController.SendSerialMessage($"{newRotMotor.x} {newRotMotor.y} {newLaserState}");
-            }
-            //serialController.SendSerialMessage(newRotMotor.x.ToString());
-            Debug.Log($"{newRotMotor.x} {newRotMotor.y} {newLaserState}");
-            //Debug.Log($"{newRotMotor.x}");
+        bool shouldMessageSerial = motorWriteTimer >= motorWriteInterval
+            && (Mathf.Abs(rotDiff.x) > 0.999f || Mathf.Abs(rotDiff.y) > 0.999f
+                || newLaserState != laserState);
 
-            laser.position = new Vector3(newRot.x, -newRot.y, 0);
+        if (serialController.enabled && shouldMessageSerial)
+        {
+            serialController.SendSerialMessage($"{newRotMotor.x} {newRotMotor.y} {newLaserState}");
 
             motorWriteTimer = 0;
         }
@@ -106,15 +112,24 @@ public class JoystickController : MonoBehaviour
 
     private void InteractWithAliens()
     {
+        Collider2D collider = Physics2D.OverlapCircle(laser.transform.position, laserProbeRadius);
+        Alien alien = collider?.GetComponent<Alien>();
+        if (alien == null)
+        {
+            alienLocked = false;
+            return;
+        }
+
+        if (!alienLocked)
+        {
+            targetLockAudio.Play();
+            alienLocked = true;
+        }
+
         bool shoot = Input.GetButtonDown("Fire1");
         bool accept = Input.GetButtonDown("Fire2");
 
         if (!shoot && !accept) return;
-
-        Collider2D collider = Physics2D.OverlapCircle(laser.transform.position, laserProbeRadius);
-
-        Alien alien = collider?.GetComponent<Alien>();
-        if (alien == null) return;
 
         if (shoot)
         {
