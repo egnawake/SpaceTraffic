@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 public class AlienSpawner : MonoBehaviour
@@ -106,5 +107,18 @@ public class AlienSpawner : MonoBehaviour
     private void Start()
     {
         Loop(true);
+    }
+
+    private void Update()
+    {
+        if (Input.GetButtonDown("Reset"))
+        {
+            SceneManager.LoadScene("Main");
+        }
+
+        if (Input.GetButtonDown("Quit"))
+        {
+            Application.Quit();
+        }
     }
 }
