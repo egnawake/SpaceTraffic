@@ -18,13 +18,13 @@ public class MessageSelector : MonoBehaviour
         while (buckets[bucketIndex].Count <= 0)
         {
             bucketIndex++;
-        }
 
-        // All buckets are empty, no more messages
-        if (bucketIndex >= buckets.Length)
-        {
-            Exhausted = true;
-            return null;
+            // If all buckets are empty, return
+            if (bucketIndex >= buckets.Length)
+            {
+                Exhausted = true;
+                return null;
+            }
         }
 
         IList<AlienMessage> b = buckets[bucketIndex];

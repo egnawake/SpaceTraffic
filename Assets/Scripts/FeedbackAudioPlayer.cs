@@ -7,6 +7,8 @@ public class FeedbackAudioPlayer : MonoBehaviour
     [SerializeField] private AudioSource explode;
     [SerializeField] private AudioSource correct;
     [SerializeField] private AudioSource wrong;
+    [SerializeField] private AudioSource endResultGood;
+    [SerializeField] private AudioSource endResultBad;
 
     private AudioSource activeSource;
 
@@ -20,6 +22,8 @@ public class FeedbackAudioPlayer : MonoBehaviour
             FeedbackSound.Wrong => wrong,
             FeedbackSound.Flyby => flyby,
             FeedbackSound.Explode => explode,
+            FeedbackSound.EndResultGood => endResultGood,
+            FeedbackSound.EndResultBad => endResultBad,
             _ => throw new ArgumentException("Unknown sound")
         };
 
