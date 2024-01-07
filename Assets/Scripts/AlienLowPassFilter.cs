@@ -10,6 +10,7 @@ public class AlienLowPassFilter : MonoBehaviour, IAlienAudioFilter
 
     public void SetFrequency(float t)
     {
+        t = filterCutoffCurve.Evaluate(t);
         filter.cutoffFrequency = Mathf.Lerp(lowPassCutoffRange.x, lowPassCutoffRange.y, t);
     }
 
