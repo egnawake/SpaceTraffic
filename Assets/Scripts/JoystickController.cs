@@ -54,7 +54,7 @@ public class JoystickController : MonoBehaviour
     private void Start()
     {
         rot = Vector2.zero;
-        laserState = 0;
+        laserState = 1;
         InitMotor();
     }
 
@@ -75,7 +75,7 @@ public class JoystickController : MonoBehaviour
     {
         if (serialController.enabled)
         {
-            serialController.SendSerialMessage($"{90 + motorOffset.x} {90 + motorOffset.y} 0");
+            serialController.SendSerialMessage($"{90 + motorOffset.x} {90 + motorOffset.y} {laserState}");
         }
     }
 
@@ -191,9 +191,7 @@ public class JoystickController : MonoBehaviour
 
     private int GetLaser()
     {
-        if (Input.GetButtonDown("Fire1")) return 1;
-        else if (Input.GetButtonUp("Fire1")) return 0;
-        else return laserState;
+        return 1;
     }
 
     private void DebugShowInput(Vector2 input)
@@ -218,6 +216,15 @@ public class JoystickController : MonoBehaviour
         motorVRot = motorVRot + 90 + motorOffset.y;
 
         return new Vector2(motorHRot, motorVRot);
+    }
+
+    private void OnApplicationQuit()
+    {
+        if (serialController.enabled)
+        {
+            Vector2 motorRot = WorldToMotor(rot);
+            serialController.SendSerialMessage($"{motorRot.x} {motorRot.y} 0");
+        }
     }
 
     public event Action<float> onFrequencyChanged;
